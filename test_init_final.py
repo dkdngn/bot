@@ -1524,7 +1524,7 @@ while True:
 			else :
 				embed = discord.Embed(
 					title = "----- 분배결과! -----",
-					description= '```세금 : ' + str(cal_tax1) + '\n1차 수령액 : ' + str(real_money) + '\n분배자 거래소등록금액 : ' + str(floor(real_money/num_sep)) + '```',
+					description= '```세금 : ' + str(cal_tax1) + '\n 수령액 : ' + str(real_money) + '\n분배자 거래소등록금액 : ' + str(floor(real_money/num_sep)) + '```',
 					color=0xff00ff
 					)
 				await ctx.send(embed=embed, tts=False)
