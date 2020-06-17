@@ -1515,7 +1515,7 @@ while True:
 			separate_money = []
 			separate_money = msg.split(" ")
 			num_sep = floor(int(separate_money[0]))
-			cal_tax1 = floor(float(separate_money[1])*0.05)
+			cal_tax1 = floor(float(separate_money[1])*0.03)
 			
 			real_money = floor(floor(float(separate_money[1])) - cal_tax1)
 			cal_tax2 = floor(real_money/num_sep) - floor(float(floor(real_money/num_sep))*0.95)
@@ -1524,7 +1524,7 @@ while True:
 			else :
 				embed = discord.Embed(
 					title = "----- 분배결과! -----",
-					description= '```1차 세금 : ' + str(cal_tax1) + '\n1차 수령액 : ' + str(real_money) + '\n분배자 거래소등록금액 : ' + str(floor(real_money/num_sep)) + '\n2차 세금 : ' + str(cal_tax2) + '\n인당 실수령액 : ' + str(floor(float(floor(real_money/num_sep))*0.95)) + '```',
+					description= '```세금 : ' + str(cal_tax1) + '\n1차 수령액 : ' + str(real_money) + '```',
 					color=0xff00ff
 					)
 				await ctx.send(embed=embed, tts=False)
