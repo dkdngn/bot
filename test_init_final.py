@@ -2471,6 +2471,10 @@ while True:
 	@client.command(name='!보스')
 	async def brother2_(ctx):
 		await PlaySound(voice_client1, './sound/보스.mp3')
+		
+	@client.command(name='!담배')
+	async def brother2_(ctx):
+		await PlaySound(voice_client1, './sound/담배.mp3')
 	
 	@client.command(name='!TJ', aliases=['!tj'])
 	async def TJ_(ctx):
