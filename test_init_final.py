@@ -2556,7 +2556,7 @@ while True:
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/모여.mp3')
 		
-	@client.command(name='!')
+	@client.command(name='!뽕')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/뽕.mp3')
 	
