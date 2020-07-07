@@ -2588,11 +2588,13 @@ while True:
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/냥이.mp3')
 	
-	@client.command(name='!TJ', aliases=['!tj'])
-	async def TJ_(ctx):
-		resultTJ = random.randrange(1,9)
-		await PlaySound(voice_client1, './sound/TJ' + str(resultTJ) +'.mp3')
-
+	@client.command(name='!만두')
+	async def brother5_(ctx):
+		await PlaySound(voice_client1, './sound/만두.mp3')
+		
+	@client.command(name='!팹시')
+	async def brother5_(ctx):
+		await PlaySound(voice_client1, './sound/팹시.mp3')
 
 	@client.event
 	async def on_command_error(ctx, error):
