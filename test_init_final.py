@@ -2540,9 +2540,9 @@ while True:
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/쉬커.mp3')
 	
-	@client.command(name='!뻭')
+	@client.command(name='!네이버')
 	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/뻭.mp3')
+		await PlaySound(voice_client1, './sound/네이버.mp3')
 		
 	@client.command(name='!졸려')
 	async def brother5_(ctx):
@@ -2595,7 +2595,15 @@ while True:
 	@client.command(name='!팹시')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/팹시.mp3')
+		
+	@client.command(name='!바람')
+	async def brother5_(ctx):
+		await PlaySound(voice_client1, './sound/바람.mp3')	
 
+	@client.command(name='!희구')
+	async def brother5_(ctx):
+		await PlaySound(voice_client1, './sound/희구.mp3')
+		
 	@client.event
 	async def on_command_error(ctx, error):
 		if isinstance(error, CommandNotFound):
