@@ -2512,22 +2512,10 @@ while True:
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/자두.mp3')
 	
-	@client.command(name='!영템')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/영템.mp3')
-		
 	@client.command(name='!쿠앵')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/쿠앵.mp3')
 	
-	@client.command(name='!홍시')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/홍시.mp3')
-	
-	@client.command(name='!하니')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/하니.mp3')
-		
 	@client.command(name='!콜라')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/콜라.mp3')
@@ -2544,10 +2532,6 @@ while True:
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/네이버.mp3')
 		
-	@client.command(name='!졸려')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/졸려.mp3')	
-	
 	@client.command(name='!빠이')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/빠이.mp3')
@@ -2576,10 +2560,6 @@ while True:
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/중독.mp3')
 		
-	@client.command(name='!맹구')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/맹구.mp3')
-	
 	@client.command(name='!카운터')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/카운터.mp3')
@@ -2588,10 +2568,6 @@ while True:
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/냥이.mp3')
 	
-	@client.command(name='!만두')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/만두.mp3')
-		
 	@client.command(name='!팹시')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/팹시.mp3')
