@@ -1673,7 +1673,7 @@ while True:
 				await ctx.send('```분배 인원이 0입니다. 재입력 해주세요.```', tts=False)
 			else :
 				embed = discord.Embed(
-					title = "----- embed=embed, tts=False)
+					title = "----- 분배결과! -----",
 					description= '```1차 세금 : ' + str(cal_tax1) + '\n1차 수령액 : ' + str(real_money) + '\n분배자 거래소등록금액 : ' + str(floor(real_money/num_sep)) + '\n2차 세금 : ' + str(cal_tax2) + '\n인당 실수령액 : ' + str(floor(float(floor(real_money/num_sep)) + '```',
 					color=0xff00ff
 					)
