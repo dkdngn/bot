@@ -1670,7 +1670,7 @@ while True:
 			cal_tax1 = floor(float(separate_money[1])*0.10)
 			
 			real_money = floor(floor(float(separate_money[1])) - cal_tax1)
-			cal_tax2 = floor(real_money/num_sep) - floor(float(floor(real_money/num_sep)))
+			cal_tax2 = floor(real_money/num_sep)
 			if num_sep == 0 :
 				await ctx.send('```분배 인원이 0입니다. 재입력 해주세요.```', tts=False)
 			else :
