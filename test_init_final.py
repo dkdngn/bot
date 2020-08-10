@@ -1667,7 +1667,7 @@ while True:
 			separate_money = []
 			separate_money = msg.split(" ")
 			num_sep = floor(int(separate_money[0]))
-			cal_tax1 = floor(float(separate_money[1])*0.50)
+			cal_tax1 = floor(float(separate_money[1])*0.10)
 			
 			real_money = floor(floor(float(separate_money[1])) - cal_tax1)
 			cal_tax2 = floor(real_money/num_sep) - floor(float(floor(real_money/num_sep))*0.03)
