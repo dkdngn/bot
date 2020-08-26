@@ -2865,7 +2865,7 @@ class mainCog(commands.Cog):
 
 	################ ?????????????? ################ 
 	@commands.command(name='!오빠')
-		async def brother1_(ctx):
+	async def brother1_(ctx):
 		await PlaySound(voice_client1, './sound/오빠.mp3')
 
 	@commands.command(name='!언니')
