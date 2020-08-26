@@ -1581,22 +1581,22 @@ class mainCog(commands.Cog):
 
 	################ 분배 결과 출력 ################ 
 	@commands.command(name=command[11][0], aliases=command[11][1:])
-		async def bunbae_(ctx):
+	async def bunbae_(self, ctx):
 		if ctx.message.channel.id == basicSetting[7]:
 			msg = ctx.message.content[len(ctx.invoked_with)+1:]
 			separate_money = []
 			separate_money = msg.split(" ")
 			num_sep = floor(int(separate_money[0]))
-			cal_tax1 = floor(float(separate_money[1])*0.10)
+			cal_tax1 = floor(float(separate_money[1])*0.05)
 			
 			real_money = floor(floor(float(separate_money[1])) - cal_tax1)
-			cal_tax2 = floor(real_money/num_sep)
+			cal_tax2 = floor(real_money/num_sep) - floor(float(floor(real_money/num_sep))*0.95)
 			if num_sep == 0 :
 				await ctx.send('```분배 인원이 0입니다. 재입력 해주세요.```', tts=False)
 			else :
 				embed = discord.Embed(
 					title = "----- 분배결과! -----",
-					description= '```1차 세금 : ' + str(cal_tax1) + '\n1차 수령액 : ' + str(real_money) + '\n인당 실수령액 : ' + str(cal_tax2) + '```',
+					description= '```1차 세금 : ' + str(cal_tax1) + '\n1차 수령액 : ' + str(real_money) + '\n분배자 거래소등록금액 : ' + str(floor(real_money/num_sep)) + '\n2차 세금 : ' + str(cal_tax2) + '\n인당 실수령액 : ' + str(floor(float(floor(real_money/num_sep))*0.95)) + '```',
 					color=0xff00ff
 					)
 				await ctx.send(embed=embed, tts=False)
@@ -1604,8 +1604,8 @@ class mainCog(commands.Cog):
 			return
 
 	################ 사다리 결과 출력 ################ 
-	@client.command(name=command[12][0], aliases=command[12][1:])
-	async def ladder_(ctx):
+	@commands.command(name=command[12][0], aliases=command[12][1:])
+	async def ladder_(self, ctx):
 		if ctx.message.channel.id == basicSetting[7] or ctx.message.channel.id == basicSetting[8]:
 			msg = ctx.message.content[len(ctx.invoked_with)+1:]
 			ladder = []
@@ -2864,8 +2864,8 @@ class mainCog(commands.Cog):
 		return await ctx.send(result_rock_paper_scissors)
 
 	################ ?????????????? ################ 
-	@client.command(name='!오빠')
-	async def brother1_(ctx):
+	@commands.command(name='!오빠')
+		async def brother1_(ctx):
 		await PlaySound(voice_client1, './sound/오빠.mp3')
 
 	@client.command(name='!언니')
