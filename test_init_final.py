@@ -2868,119 +2868,119 @@ class mainCog(commands.Cog):
 		async def brother1_(ctx):
 		await PlaySound(voice_client1, './sound/오빠.mp3')
 
-	@client.command(name='!언니')
+	@commands.command(name='!언니')
 	async def sister_(ctx):
 		await PlaySound(voice_client1, './sound/언니.mp3')
 		
-	@client.command(name='!형')
+	@commands.command(name='!형')
 	async def brother2_(ctx):
 		await PlaySound(voice_client1, './sound/형.mp3')
 		
-	@client.command(name='!누나')
+	@commands.command(name='!누나')
 	async def brother3_(ctx):
 		await PlaySound(voice_client1, './sound/누나.mp3')
 		
-	@client.command(name='!안녕')
+	@commands.command(name='!안녕')
 	async def brother4_(ctx):
 		await PlaySound(voice_client1, './sound/hello.mp3')
 		
-	@client.command(name='!담배')
+	@commands.command(name='!담배')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/보스.mp3')
 		
-	@client.command(name='!크리담배')
+	@commands.command(name='!크리담배')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/크리담배.mp3')
 		
-	@client.command(name='!뼈담배')
+	@commands.command(name='!뼈담배')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/뼈담배.mp3')
 	
-	@client.command(name='!뼈')
+	@commands.command(name='!뼈')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/뼈.mp3')
 	
-	@client.command(name='!크리')
+	@commands.command(name='!크리')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/크리.mp3')
 		
-	@client.command(name='!빽')
+	@commands.command(name='!빽')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/빽.mp3')
 	
-	@client.command(name='!방울')
+	@commands.command(name='!방울')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/방울.mp3')
 		
-	@client.command(name='!서큐')
+	@commands.command(name='!서큐')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/서큐.mp3')
 	
-	@client.command(name='!말포이')
+	@commands.command(name='!말포이')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/말포이.mp3')
 	
-	@client.command(name='!습이')
+	@commands.command(name='!습이')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/습이.mp3')
 		
-	@client.command(name='!자두')
+	@commands.command(name='!자두')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/자두.mp3')
 	
-	@client.command(name='!쿠앵')
+	@commands.command(name='!쿠앵')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/쿠앵.mp3')
 	
-	@client.command(name='!콜라')
+	@commands.command(name='!콜라')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/콜라.mp3')
 		
-	@client.command(name='!갓신')
+	@commands.command(name='!갓신')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/갓신.mp3')
 		
-	@client.command(name='!쉬커')
+	@commands.command(name='!쉬커')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/쉬커.mp3')
 	
-	@client.command(name='!네이버')
+	@commands.command(name='!네이버')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/네이버.mp3')
 		
-	@client.command(name='!빠이')
+	@commands.command(name='!빠이')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/빠이.mp3')
 	
-	@client.command(name='!모여')
+	@commands.command(name='!모여')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/모여.mp3')
 		
-	@client.command(name='!뽕')
+	@commands.command(name='!뽕')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/뽕.mp3')
 	
-	@client.command(name='!뽕담배')
+	@commands.command(name='!뽕담배')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/뽕담배.mp3')
 	
-	@client.command(name='!중화')
+	@commands.command(name='!중화')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/중화.mp3')
 		
-	@client.command(name='!계란')
+	@commands.command(name='!계란')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/계란.mp3')	
 		
-	@client.command(name='!중독')
+	@commands.command(name='!중독')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/중독.mp3')
 		
-	@client.command(name='!카운터')
+	@commands.command(name='!카운터')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/카운터.mp3')
 	
-	@client.command(name='!바람')
+	@commands.command(name='!바람')
 	async def brother5_(ctx):
 		await PlaySound(voice_client1, './sound/바람.mp3')
 		
