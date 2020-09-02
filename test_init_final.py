@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*- 
 
-################ Server Ver. 20 (2020. 8. 26.) #####################
+################ Server Ver. 21 (2020. 9. 2.) #####################
 
 import sys, os
 import asyncio, discord, aiohttp
@@ -10,7 +10,7 @@ from discord.ext.commands import CommandNotFound, MissingRequiredArgument
 from gtts import gTTS
 from github import Github
 import base64
-import gspread #정산
+import gspread, boto3
 from oauth2client.service_account import ServiceAccountCredentials #정산
 from io import StringIO
 import urllib.request
@@ -68,7 +68,13 @@ indexFixedBossname = []
 access_token = os.environ["BOT_TOKEN"]			
 git_access_token = os.environ["GIT_TOKEN"]			
 git_access_repo = os.environ["GIT_REPO"]			
-git_access_repo_restart = os.environ["GIT_REPO_RESTART"]			
+git_access_repo_restart = os.environ["GIT_REPO_RESTART"]
+try:	
+	aws_key = os.environ["AWS_KEY"]			
+	aws_secret_key = os.environ["AWS_SECRET_KEY"]			
+except:
+	aws_key = ""
+	aws_secret_key = ""
 
 g = Github(git_access_token)
 repo = g.get_repo(git_access_repo)
@@ -430,20 +436,26 @@ channel = ''
 
 #mp3 파일 생성함수(gTTS 이용, 남성목소리)
 async def MakeSound(saveSTR, filename):
-	
-	tts = gTTS(saveSTR, lang = 'ko')
-	tts.save('./' + filename + '.wav')
-	
-	'''
-	try:
-		encText = urllib.parse.quote(saveSTR)
-		urllib.request.urlretrieve("https://clova.ai/proxy/voice/api/tts?text=" + encText + "%0A&voicefont=1&format=wav",filename + '.wav')
-	except Exception as e:
-		print (e)
+	if aws_key != "" and aws_secret_key != "":
+		polly = boto3.client("polly", aws_access_key_id = aws_key, aws_secret_access_key = aws_secret_key, region_name = "eu-west-1")
+
+		s = '<speak><prosody rate="' + str(100) + '%">' +  saveSTR + '</prosody></speak>'
+
+		response = polly.synthesize_speech(
+			TextType = "ssml",
+			Text=s,
+			OutputFormat="mp3",
+			VoiceId="Seoyeon")
+
+		stream = response.get("AudioStream")
+
+		with open(f"./{filename}.mp3", "wb") as mp3file:
+			data = stream.read()
+			mp3file.write(data)
+	else:	
 		tts = gTTS(saveSTR, lang = 'ko')
-		tts.save('./' + filename + '.wav')
-		pass
-	'''
+		tts.save(f"./{filename}.mp3")
+
 #mp3 파일 재생함수	
 async def PlaySound(voiceclient, filename):
 	source = discord.FFmpegPCMAudio(filename)
@@ -1207,7 +1219,7 @@ class mainCog(commands.Cog):
 	async def setting_(self, ctx):	
 		#print (ctx.message.channel.id)
 		if ctx.message.channel.id == basicSetting[7]:
-			setting_val = '보탐봇버전 : Server Ver. 20 (2020. 8. 26.)\n'
+			setting_val = '보탐봇버전 : Server Ver. 21 (2020. 9. 2.)\n'
 			setting_val += '음성채널 : ' + self.bot.get_channel(basicSetting[6]).name + '\n'
 			setting_val += '텍스트채널 : ' + self.bot.get_channel(basicSetting[7]).name +'\n'
 			if basicSetting[8] != "" :
@@ -1230,7 +1242,7 @@ class mainCog(commands.Cog):
 					)
 			embed.add_field(
 					name="----- Special Thanks to. -----",
-					value= '```총무님, 옹님, 공부중, 꽃신, 별빛, K.H.Sim, J.W.Hong```'
+					value= '```총무, 옹님, 공부중, 꽃신, 별빛, K.H.Sim, 쿠쿠, 팥빵, Bit```'
 					)
 			await ctx.send(embed=embed, tts=False)
 		else:
@@ -1605,17 +1617,96 @@ class mainCog(commands.Cog):
 
 	################ 사다리 결과 출력 ################ 
 	@commands.command(name=command[12][0], aliases=command[12][1:])
-	async def ladder_(self, ctx):
+	async def ladder_(self, ctx : commands.Context, *, args : str = None):
 		if ctx.message.channel.id == basicSetting[7] or ctx.message.channel.id == basicSetting[8]:
-			msg = ctx.message.content[len(ctx.invoked_with)+1:]
-			ladder = []
-			ladder = msg.split(" ")
+			if not args:
+				return await ctx.send(f'```명령어 [인원] [아이디1] [아이디2] ... 형태로 입력해주시기 바랍나다.```')
+
+			ladder = args.split()
+
 			try:
-				num_cong = int(ladder[0])
+				num_cong = int(ladder[0])  # 뽑을 인원
 				del(ladder[0])
 			except ValueError:
-				return await ctx.send('```뽑을 인원은 숫자로 입력바랍니다\nex)!사다리 1 가 나 다 ...```')
-			await LadderFunc(num_cong, ladder, ctx)
+				return await ctx.send(f'```뽑을 인원은 숫자로 입력바랍니다\nex)!사다리 1 가 나 다 ...```')
+
+			if num_cong >= len(ladder):
+				return await ctx.send(f'```추첨인원이 총 인원과 같거나 많습니다. 재입력 해주세요```')
+			
+			input_dict : dict = {}
+			ladder_description : list = []
+			ladder_data : list = []
+			output_list : list = []
+			result :dict = {}
+
+			for i in range(len(ladder)):
+				input_dict[f"{i+1}"] = ladder[i]
+				if i < num_cong:
+					output_list.append("o")
+				else:
+					output_list.append("x")
+
+			for i in range(len(ladder)+1):
+				tmp_list = []
+				if i%2 != 0:
+					sample_list = ["| |-", "| | "]
+				else:
+					sample_list = ["| | ", "|-| "]
+				for i in range(len(ladder)//2):
+					value = random.choice(sample_list)
+					tmp_list.append(value)
+				ladder_description.append(tmp_list)
+
+			tmp_result = list(input_dict.keys())
+			input_data : str = ""
+
+			for i in range(len(tmp_result)):
+				if int(tmp_result[i]) < 9:
+					input_data += f"{tmp_result[i]} "
+				else:
+					input_data += f"{tmp_result[i]}"
+			input_value_data = " ".join(list(input_dict.values()))
+
+			for i in range(len(ladder_description)):
+				if (len(ladder) % 2) != 0:
+					ladder_data.append(f"{''.join(ladder_description[i])}|\n")
+				else:
+					ladder_data.append(f"{''.join(ladder_description[i])[:-1]}\n")
+				
+				random.shuffle(output_list)
+
+			output_data = list(" ".join(output_list))
+
+			for line in reversed(ladder_data):
+				for i, x in enumerate(line):
+					if i % 2 == 1 and x == '-':
+						output_data[i-1], output_data[i+1] = output_data[i+1], output_data[i-1]
+
+			for i in range(output_data.count(" ")):
+				output_data.remove(" ")
+
+			for i in range(len(tmp_result)):
+				result[tmp_result[i]] = output_data[i]
+			result_str : str = ""
+			join_member : list = []
+			win_member : list = []
+			lose_member : list = []
+
+			for x, y in result.items():
+				join_member.append(f"{x}:{input_dict[f'{x}']}")
+				if y == "o":
+					win_member.append(f"{input_dict[f'{x}']}")
+				else :
+					lose_member.append(f"{input_dict[f'{x}']}")
+
+			embed = discord.Embed(title  = "🎲 사다리! 묻고 더블로 가!",
+				color=0x00ff00
+				)
+			embed.description = f"||```{input_data}\n{''.join(ladder_data)}{' '.join(output_list)}```||"
+			embed.add_field(name = "👥 참가자", value =  f"```fix\n{', '.join(join_member)}```", inline=False)
+			embed.add_field(name = "😍 당첨", value =  f"```fix\n{', '.join(win_member)}```")
+			embed.add_field(name = "😭 낙첨", value =  f"```{', '.join(lose_member)}```")
+			return await ctx.send(ctx.send, embed = embed)
 		else:
 			return
 
@@ -1804,7 +1895,7 @@ class mainCog(commands.Cog):
 			sayMessage = msg
 			await MakeSound(ctx.message.author.display_name +'님이, ' + sayMessage, './sound/say')
 			await ctx.send("```< " + ctx.author.display_name + " >님이 \"" + sayMessage + "\"```", tts=False)
-			await PlaySound(ctx.voice_client, './sound/say.wav')
+			await PlaySound(ctx.voice_client, './sound/say.mp3')
 		else:
 			return
 
@@ -2865,125 +2956,21 @@ class mainCog(commands.Cog):
 
 	################ ?????????????? ################ 
 	@commands.command(name='!오빠')
-	async def brother1_(ctx):
-		await PlaySound(voice_client1, './sound/오빠.mp3')
+	async def brother1_(self, ctx):
+		await PlaySound(ctx.voice_client, './sound/오빠.mp3')
 
 	@commands.command(name='!언니')
-	async def sister_(ctx):
-		await PlaySound(voice_client1, './sound/언니.mp3')
-		
+	async def sister_(self, ctx):
+		await PlaySound(ctx.voice_client, './sound/언니.mp3')
+
 	@commands.command(name='!형')
-	async def brother2_(ctx):
-		await PlaySound(voice_client1, './sound/형.mp3')
-		
-	@commands.command(name='!누나')
-	async def brother3_(ctx):
-		await PlaySound(voice_client1, './sound/누나.mp3')
-		
-	@commands.command(name='!안녕')
-	async def brother4_(ctx):
-		await PlaySound(voice_client1, './sound/hello.mp3')
-		
-	@commands.command(name='!담배')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/보스.mp3')
-		
-	@commands.command(name='!크리담배')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/크리담배.mp3')
-		
-	@commands.command(name='!뼈담배')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/뼈담배.mp3')
+	async def brother2_(self, ctx):
+		await PlaySound(ctx.voice_client, './sound/형.mp3')
 	
-	@commands.command(name='!뼈')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/뼈.mp3')
-	
-	@commands.command(name='!크리')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/크리.mp3')
-		
-	@commands.command(name='!빽')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/빽.mp3')
-	
-	@commands.command(name='!방울')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/방울.mp3')
-		
-	@commands.command(name='!서큐')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/서큐.mp3')
-	
-	@commands.command(name='!말포이')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/말포이.mp3')
-	
-	@commands.command(name='!습이')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/습이.mp3')
-		
-	@commands.command(name='!자두')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/자두.mp3')
-	
-	@commands.command(name='!쿠앵')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/쿠앵.mp3')
-	
-	@commands.command(name='!콜라')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/콜라.mp3')
-		
-	@commands.command(name='!갓신')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/갓신.mp3')
-		
-	@commands.command(name='!쉬커')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/쉬커.mp3')
-	
-	@commands.command(name='!네이버')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/네이버.mp3')
-		
-	@commands.command(name='!빠이')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/빠이.mp3')
-	
-	@commands.command(name='!모여')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/모여.mp3')
-		
-	@commands.command(name='!뽕')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/뽕.mp3')
-	
-	@commands.command(name='!뽕담배')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/뽕담배.mp3')
-	
-	@commands.command(name='!중화')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/중화.mp3')
-		
-	@commands.command(name='!계란')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/계란.mp3')	
-		
-	@commands.command(name='!중독')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/중독.mp3')
-		
-	@commands.command(name='!카운터')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/카운터.mp3')
-	
-	@commands.command(name='!바람')
-	async def brother5_(ctx):
-		await PlaySound(voice_client1, './sound/바람.mp3')
-		
+	@commands.command(name='!TJ', aliases=['!tj'])
+	async def TJ_(self, ctx):
+		resultTJ = random.randrange(1,9)
+		await PlaySound(ctx.voice_client, './sound/TJ' + str(resultTJ) +'.mp3')
 
 class IlsangDistributionBot(commands.AutoShardedBot):
 	def __init__(self):
