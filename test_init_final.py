@@ -4286,7 +4286,7 @@ class IlsangDistributionBot(commands.AutoShardedBot):
 			return await ctx.send(f"**[{ctx.message.content.split()[0]}]** 명령을 사용할 권한이 없습니다.!")
 		elif isinstance(error, discord.ext.commands.CheckFailure):
 			return await ctx.send(f"**[{ctx.message.content.split()[0]}]** 명령을 사용할 권한이 없습니다.!")
-		raise error
+		
 
 	async def close(self):
 		await super().close()
